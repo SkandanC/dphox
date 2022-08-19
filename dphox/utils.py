@@ -212,9 +212,21 @@ def shapely_patch(geom: Union[MultiPolygon, Polygon], **kwargs):
     vertices = np.vstack(
         [np.vstack([np.array(poly.exterior)[:, :2]] + [np.array(hole)[:, :2] for hole in poly.interiors])
          for poly in polygon]).squeeze()
-    codes = sum([
-        ([Path.MOVETO] + [Path.LINETO] * (len(poly.exterior.coords) - 1) + sum(([Path.MOVETO] + [Path.LINETO] * (len(hole.coords) - 1)
-                                                                                for hole in poly.interiors), []))
-        for poly in polygon], [])
+    codes = sum(
+        (
+            [Path.MOVETO]
+            + [Path.LINETO] * (len(poly.exterior.coords) - 1)
+            + sum(
+                (
+                    [Path.MOVETO] + [Path.LINETO] * (len(hole.coords) - 1)
+                    for hole in poly.interiors
+                ),
+                [],
+            )
+            for poly in polygon
+        ),
+        [],
+    )
+
 
     return PathPatch(Path(vertices, codes), **kwargs)
