@@ -303,7 +303,7 @@ class Foundry:
                     for poly_si in prev_si_geom.geoms:
                         for poly in geom:
                             mat = poly.intersection(poly_si)
-                            if isinstance(mat, Polygon) or isinstance(mat, MultiPolygon):
+                            if isinstance(mat, (Polygon, MultiPolygon)):
                                 geoms.append(mat)
                     mesh = _shapely_to_mesh_from_step(MultiPolygon(geoms), meshes, step)
                     device.add_geometry(mesh.apply_translation((0, 0, dz - step.thickness)), geom_name=mesh_name)
@@ -321,7 +321,7 @@ class Foundry:
                     #         "The cladding is not in the device geometry / not spec'd by the foundry object.")
                     # raise NotImplementedError(f"Fabrication method not yet implemented for `{step.process_op.value}`")
                     # device.geometry['clad'] -= difference(device.geometry['clad'], mesh)
-                elif not step.process_op == ProcessOp.DUMMY:
+                elif step.process_op != ProcessOp.DUMMY:
                     raise NotImplementedError(f"Fabrication method not yet implemented for `{step.process_op.value}`")
                 if step.mat.name == SILICON.name:
                     prev_si_geom = geom

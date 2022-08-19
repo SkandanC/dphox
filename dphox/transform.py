@@ -141,7 +141,7 @@ class GDSTransform(AffineTransform):
     @classmethod
     def parse(cls, transform: Optional[Union["GDSTransform", Tuple, np.ndarray]],
               existing_transform: Optional[Tuple[AffineTransform, List["GDSTransform"]]] = None) -> \
-            Tuple[AffineTransform, List["GDSTransform"]]:
+                Tuple[AffineTransform, List["GDSTransform"]]:
         """Turns representations like :code:`(x, y, angle)` or a numpy array into convenient GDS/affine transforms.
 
         Args:
